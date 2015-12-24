@@ -24,6 +24,23 @@ function fineForever(settings, callback) {
     loadingHTML: null
   };
 
+  /**
+   * Based on the pagination selector, find next URL and adjust settings
+   * @private
+   * @param {Node} nav - pagination element
+   * @param {String} nextSelector - selector to look for in the pagination (defined in initialization options)
+   * @returns {String|Boolean} the next url or false if there is none
+   */
+  function findNextUrl(nav, nextSelector) {
+    var url = nav.querySelector( nextSelector );
+
+    // If next selector is found
+    if(!!url) {
+      return url.getAttribute('href');
+    } else {
+      return false;
+    }
+  }
 
   /**
    * Once the page starts moving, track to see if we've reached our callback
@@ -34,13 +51,31 @@ function fineForever(settings, callback) {
 
     // If we've passed the element_position (with offset)
     if(scroll_top >= this.element_position) {
-      var url = this.findNextUrl();
+      var url = this.findNextUrl( this.nav, this.settings.nextSelector );
 
       // If url is not false and we're not already retrieving something
       if(url && !this.is_retrieving) {
         this.retrieveItems(url);
       }
     }
+  }
+
+  /**
+   * Add loading HTML if defined in the settings before the nav
+   * @private
+   * @param {Node} nav - pagination element
+   * @param {String} loadingHtml - data to prepend to the pagination
+   */
+  function addLoadingHtml(nav, loadingHtml) {
+    var loading_div = document.createElement('div');
+    loading_div.id = 'fcinfinite-loading';
+
+    if(loadingHtml) {
+      loading_div.innerHTML = loadingHtml;
+    }
+
+    // Insert immediately before pagination
+    nav.parentNode.insertBefore(loading_div, nav);
   }
 
   /**
@@ -73,25 +108,9 @@ function fineForever(settings, callback) {
 
     window.addEventListener('scroll', this.scrollEventCallback);
 
-    this.addLoadingHtml();
+    addLoadingHtml(this.nav, this.settings.loadingHTML);
 
     return this;
-  };
-
-  /**
-   * Based on the pagination selector, find next URL and adjust settings
-   * @protected
-   * @returns {String|Boolean} the next url or false if there is none
-   */
-  fineForever.prototype.findNextUrl = function() {
-    var url = this.nav.querySelector( this.settings.nextSelector );
-
-    // If next selector is found
-    if(!!url) {
-      return url.getAttribute('href');
-    } else {
-      return false;
-    }
   };
 
   /**
@@ -163,21 +182,6 @@ function fineForever(settings, callback) {
 
     xhr.open('GET', url, true);
     xhr.send();
-  };
-
-  /**
-   * Add loading HTML if defined in the settings before the nav
-   */
-  fineForever.prototype.addLoadingHtml = function() {
-    var loading_div = document.createElement('div');
-    loading_div.id = 'fcinfinite-loading';
-
-    if(this.settings.loadingHTML !== null) {
-      loading_div.innerHTML = this.settings.loadingHTML;
-    }
-
-    // Insert immediately before pagination
-    this.nav.parentNode.insertBefore(loading_div, this.nav);
   };
 
   /**
