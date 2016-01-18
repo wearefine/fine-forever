@@ -39,4 +39,13 @@ offset: 500, // Distance from pagination nav
 loadingHTML: null // Optional markup to display before items are loaded in. 
 ```
 
+## Testing
 
+Install all dependencies:
+
+```bash
+npm install --save-dev
+```
+
+* `npm test` provides a quick, one-run test as defined in [test/karma.conf.js](test/karma.conf.js)
+* `karma start test/local.karma.conf.js` opens a Karma instance that watches for file changes, as defined in [test/karma.conf.js](test/local.karma.conf.js)
