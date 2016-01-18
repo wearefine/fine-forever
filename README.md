@@ -1,5 +1,7 @@
 # Fine Forever
 
+[![Build Status](https://travis-ci.org/wearefine/fine-forever.svg?branch=master)](https://travis-ci.org/wearefine/fine-forever) [![Code Climate](https://codeclimate.com/github/wearefine/fine-forever/badges/gpa.svg)](https://codeclimate.com/github/wearefine/fine-forever)
+
 A native infinite scroll JavaScript solution.
 
 ## Quick start
