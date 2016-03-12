@@ -2,7 +2,7 @@ module.exports = function (config) {
   config.set({
     basePath : '',
     autoWatch : true,
-    frameworks: ['jasmine', 'jasmine-ajax'],
+    frameworks: ['jasmine-ajax', 'jasmine'],
     browsers : ['PhantomJS'],
     plugins : [
       'karma-phantomjs-launcher',
