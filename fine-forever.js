@@ -3,18 +3,19 @@
  * @author Tim Shedor
  */
 
-'use strict';
+(function (window, factory) {
+  'use strict';
 
-/**
- * The fineForever global initialization
- * @class
- */
-function fineForever(settings, callback) {
-  /** @lends fineForever.prototype */
-  return this.init(settings, callback);
-}
+  if (typeof define === 'function' && define.amd) {
+    define([], factory(window));
+  } else if (typeof exports === 'object') {
+    module.exports = factory(window);
+  } else {
+    window.FineForever = factory(window);
+  }
 
-(function () {
+})(window, function factory(window) {
+  'use strict';
 
   var defaults = {
     navSelector: '.pagination',
@@ -24,15 +25,17 @@ function fineForever(settings, callback) {
     loadingHTML: null
   };
 
+  var original_var = 'hello';
+
   /**
    * Based on the pagination selector, find next URL and adjust settings
    * @private
-   * @param {Node} nav - pagination element
-   * @param {String} nextSelector - selector to look for in the pagination (defined in initialization options)
+   * @param {Node} nav
+   * @param {String} next_selector
    * @returns {String|Boolean} the next url or false if there is none
    */
-  function findNextUrl(nav, nextSelector) {
-    var url = nav.querySelector( nextSelector );
+  function findNextUrl(nav, next_selector) {
+    var url = nav.querySelector( next_selector );
 
     // If next selector is found
     if(!!url) {
@@ -51,7 +54,7 @@ function fineForever(settings, callback) {
 
     // If we've passed the element_position (with offset)
     if(scroll_top >= this.element_position) {
-      var url = this.findNextUrl( this.nav, this.settings.nextSelector );
+      var url = findNextUrl(this.nav, this.settings.nextSelector);
 
       // If url is not false and we're not already retrieving something
       if(url && !this.is_retrieving) {
@@ -61,31 +64,13 @@ function fineForever(settings, callback) {
   }
 
   /**
-   * Add loading HTML if defined in the settings before the nav
-   * @private
-   * @param {Node} nav - pagination element
-   * @param {String} loadingHtml - data to prepend to the pagination
-   */
-  function addLoadingHtml(nav, loadingHtml) {
-    var loading_div = document.createElement('div');
-    loading_div.id = 'fcinfinite-loading';
-
-    if(loadingHtml) {
-      loading_div.innerHTML = loadingHtml;
-    }
-
-    // Insert immediately before pagination
-    nav.parentNode.insertBefore(loading_div, nav);
-  }
-
-  /**
    * Initialize infinite listener
    * @param {Object} [settings={}] - hash of options
    * @param {Function} callback - triggered when reached the offset above the navSelector
    *   @param {NodeList} JS elements that are loaded in
-   * @returns {fineForever}
+   * @returns {FineForever}
    */
-  fineForever.prototype.init = function(settings, callback) {
+  function FineForever(settings, callback) {
     this.is_retrieving = false;
     this.callback = callback;
 
@@ -94,24 +79,25 @@ function fineForever(settings, callback) {
       var key = Object.keys(defaults)[i];
 
       // If settings does not have the default key, apply it
-      if(!settings.hasOwnProperty(Object.keys(defaults)[i])) {
+      if(!settings.hasOwnProperty(key)) {
         settings[key] = defaults[key];
       }
     }
     this.settings = settings;
 
-    this.setNav();
+    this._setNav();
 
     // this.onScroll.bind(this) !== this.onScroll.bind(this)
     // I don't know why this is, and would like to, but for now, we're going to bind this func once and put it in an instance variable
+
     this.scrollEventCallback = onScroll.bind(this);
 
     window.addEventListener('scroll', this.scrollEventCallback);
 
-    addLoadingHtml(this.nav, this.settings.loadingHTML);
+    this.addLoadingHtml();
 
     return this;
-  };
+  }
 
   /**
    * Reset nav selector
@@ -119,7 +105,7 @@ function fineForever(settings, callback) {
    * @sets this.nav
    * @sets this.element_position
    */
-  fineForever.prototype.setNav = function() {
+  FineForever.prototype._setNav = function() {
     this.nav = document.querySelector(this.settings.navSelector);
 
     // Abort if nav item can't be found
@@ -138,12 +124,12 @@ function fineForever(settings, callback) {
    * @protected
    * @param {String} url
    */
-  fineForever.prototype.retrieveItems = function(url) {
+  FineForever.prototype.retrieveItems = function(url) {
     var xhr = new XMLHttpRequest();
     var _this = this;
     this.is_retrieving = true;
 
-    var loading_html = document.getElementById('fcinfinite-loading');
+    var loading_html = document.getElementById('ffinfinite-loading');
     loading_html.style.display = 'block';
 
     xhr.onreadystatechange = function() {
@@ -163,7 +149,7 @@ function fineForever(settings, callback) {
       if(new_nav && new_nav.innerHTML.length) {
         // If pagination present, replace markup and reset listeners
         _this.nav.innerHTML = new_nav.innerHTML;
-        _this.setNav();
+        _this._setNav();
 
       } else {
         // If no pagination present, remove scroll listener and pagination node from DOM
@@ -185,16 +171,32 @@ function fineForever(settings, callback) {
   };
 
   /**
-   * Remove fineForever instance
+   * Add loading HTML if defined in the settings before the nav
    */
-  fineForever.prototype.destroy = function() {
+  FineForever.prototype.addLoadingHtml = function() {
+    var loading_div = document.createElement('div');
+    loading_div.id = 'ffinfinite-loading';
+
+    if(this.settings.loadingHTML !== null) {
+      loading_div.innerHTML = this.settings.loadingHTML;
+    }
+
+    // Insert immediately before pagination
+    this.nav.parentNode.insertBefore(loading_div, this.nav);
+  };
+
+  /**
+   * Remove FineForever instance
+   */
+  FineForever.prototype.destroy = function() {
     window.removeEventListener('scroll', this.scrollEventCallback);
     this.nav.remove();
-    var loading_div = document.getElementById('fcinfinite-loading');
+    var loading_div = document.getElementById('ffinfinite-loading');
 
     if(loading_div) {
       loading_div.remove();
     }
   };
 
-})();
+  return FineForever;
+});

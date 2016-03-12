@@ -1,0 +1,40 @@
+{
+  "name": "fine-forever",
+  "version": "1.0.0",
+  "description": "Infinite scroll in native JavaScript",
+  "main": "fine-forever.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "karma": "~0.13",
+    "karma-jasmine": "^0.3.6",
+    "karma-jasmine-ajax": "latest",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-chrome-launcher": "^0.2.2"
+  },
+  "scripts": {
+    "test": "karma start ./test/karma.conf.js",
+    "test:dev": "karma start ./test/local.karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wearefine/fine-forever.git"
+  },
+  "keywords": [
+    "infinite",
+    "scrolling",
+    "vanilla",
+    "native",
+    "browser"
+  ],
+  "author": "Tim Shedor <tim@wearefine.com>",
+  "contributors": [
+    "FINE Design Group, Inc. Dev Department"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wearefine/fine-forever/issues"
+  },
+  "homepage": "https://github.com/wearefine/fine-forever"
+}

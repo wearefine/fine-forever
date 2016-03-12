@@ -1,5 +1,7 @@
 # Fine Forever
 
+[![Build Status](https://travis-ci.org/wearefine/fine-forever.svg?branch=master)](https://travis-ci.org/wearefine/fine-forever) [![Code Climate](https://codeclimate.com/github/wearefine/fine-forever/badges/gpa.svg)](https://codeclimate.com/github/wearefine/fine-forever)
+
 A native infinite scroll JavaScript solution.
 
 ## Quick start
@@ -18,7 +20,7 @@ Initialize the listener with options and a callback. The callback's first param 
 ```javascript
 var wrapper = document.querySelector('.wrapper');
 
-var infinite = new fineForever({}, function(items) {
+var infinite = new FineForever({}, function(items) {
   var html = '';
 
   for(var i = 0; i < items.length; i++) {
@@ -39,4 +41,13 @@ offset: 500, // Distance from pagination nav
 loadingHTML: null // Optional markup to display before items are loaded in. 
 ```
 
+## Testing
 
+Install all dependencies:
+
+```bash
+npm install --save-dev
+```
+
+* `npm test` provides a quick, one-run test as defined in [test/karma.conf.js](test/karma.conf.js)
+* `npm run test:dev` opens a Karma instance that watches for file changes, as defined in [test/karma.conf.js](test/local.karma.conf.js)
