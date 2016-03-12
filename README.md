@@ -20,7 +20,7 @@ Initialize the listener with options and a callback. The callback's first param 
 ```javascript
 var wrapper = document.querySelector('.wrapper');
 
-var infinite = new fineForever({}, function(items) {
+var infinite = new FineForever({}, function(items) {
   var html = '';
 
   for(var i = 0; i < items.length; i++) {

@@ -2,21 +2,22 @@ module.exports = function (config) {
   config.set({
     basePath : '',
     autoWatch : true,
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'jasmine-ajax'],
     browsers : ['PhantomJS'],
     plugins : [
       'karma-phantomjs-launcher',
       'karma-jasmine',
+      'karma-jasmine-ajax'
     ],
     files: [
       'spec/*.js',
       '../fine-forever.js',
 
       {
-        pattern: 'support/*.html',
+        pattern: '../*.js',
         watched: true,
         served: true,
-        included: true
+        included: false
       }
     ],
     singleRun: true,
