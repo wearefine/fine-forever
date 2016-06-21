@@ -1,3 +1,9 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
+after_success:
+- chmod ugo+x notify.sh
+- '[ "${TRAVIS_PULL_REQUEST}" != "false" ] || ./notify.sh'
+env:
+  global:
+    secure: GDHP0i9v0bBSlf+jWFJFnOR7onDbPIyVM7hUfgS9xCh1pWPRVGGNQLFolp6NZP4QJCJxuyFYXZm0MPbVEvpLofaxTELEePjGxV+eIoSrOJt21ucK9jUChnoP9huHx4o4DB2REDPG1wadytSThCNY3QxLxYy6ngXy+cCCneBJL6Io90nlFi1+oWlh5fXlIddYFLPI0XrRvNWvW6evq+F1B1yLP32j06zbis3EByb0eImjWI2GH0+TldhP82YEAk5FmHIWH3DUQQIjMJwp+nK4tuTqB4iZtWhwlBfR2cu6zw0s5PDdKVCeONWObEVT9pbJRx5d/clpJJujLpqpWgX0H9BY3QWjiKidvHeLz/cwJwP1ZjkoNPlztAF8sB6OXcXWKfMMKH25vwSz+T3vLadX4fKSNNlm12fA6r365X6WZJVaPg026trvVD50OqR81Z9oLFEfVhL+Rd7f7s/sUafkgPXXGVhQD15qQqI8XopuK7iY+V7ADp/9DMHmhBq/gey3UkaxUS7sgF5wwYkyBbrKK6Efh0ZlCmV0YvKtXz6ssJmLW+jzYrc+6NdiP87J+6qYAhxjRdOP0dxQUfA/QBDIl8D8uO+ohG2E3BSpaEgc9b0G1kxtfkZO438I27wUe+qcHScGsl6eTGOlNwpq1EAInJ+f3f63VOc11M3HOnV5sm0=
